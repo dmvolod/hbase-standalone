@@ -1,0 +1,1 @@
+# HBase Standalone Docker image
