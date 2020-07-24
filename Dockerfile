@@ -66,7 +66,7 @@ EXPOSE 2181
 EXPOSE 16000
 # HBase Master Web UI
 EXPOSE 16010
-# Regionserver API port
+# HBase Regionserver API port
 EXPOSE 16020
 # HBase Regionserver web UI
 EXPOSE 16030

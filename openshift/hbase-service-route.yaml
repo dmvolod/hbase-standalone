@@ -1,0 +1,87 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hbase-service
+  labels:
+    app: hbase-standalone
+    app.kubernetes.io/component: hbase-standalone
+    app.kubernetes.io/instance: hbase-standalone
+    app.kubernetes.io/name: ''
+    app.kubernetes.io/part-of: hbase-standalone-app
+    app.openshift.io/runtime: ''
+    app.openshift.io/runtime-version: 2.0.0
+spec:
+  ports:
+    - name: master-api
+      protocol: TCP
+      port: 16000
+      targetPort: 16000
+    - name: master-web
+      protocol: TCP
+      port: 16010
+      targetPort: 16010
+    - name: regionserver-api
+      protocol: TCP
+      port: 16020
+      targetPort: 16020
+    - name: regionserver-web
+      protocol: TCP
+      port: 16030
+      targetPort: 16030
+    - name: zookeper
+      protocol: TCP
+      port: 2181
+      targetPort: 2181
+  selector:
+    app: hbase-standalone
+    deploymentconfig: hbase-standalone
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hbase-master-web
+  labels:
+    app: hbase-standalone
+    app.kubernetes.io/component: hbase-standalone
+    app.kubernetes.io/instance: hbase-standalone
+    app.kubernetes.io/name: ''
+    app.kubernetes.io/part-of: hbase-standalone-app
+    app.openshift.io/runtime: ''
+    app.openshift.io/runtime-version: 2.0.0
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: hbase-service
+    weight: 100
+  port:
+    targetPort: master-web
+  wildcardPolicy: None
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hbase-region-web
+  labels:
+    app: hbase-standalone
+    app.kubernetes.io/component: hbase-standalone
+    app.kubernetes.io/instance: hbase-standalone
+    app.kubernetes.io/name: ''
+    app.kubernetes.io/part-of: hbase-standalone-app
+    app.openshift.io/runtime: ''
+    app.openshift.io/runtime-version: 2.0.0
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: hbase-service
+    weight: 100
+  port:
+    targetPort: regionserver-web
+  wildcardPolicy: None
